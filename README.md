@@ -26,3 +26,7 @@ Arguments (in order):
 4. PAST : this is optional argument, by default true. If given false, then commits will be done for future not past.
 
 > NOTE: You shold be allowed to push to the repo mentioned during running of the script `run.sh`
+
+## Prerequisite
+
+1. A clean **GitHub Repository** on your GitHub account
