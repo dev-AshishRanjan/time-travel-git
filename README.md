@@ -2,7 +2,7 @@
 
 > **_For Educational Purpose Only_**
 
-we tried to make the time travel git as easy and intuitive as possible. Here's a quick guide on how you can use it:
+we tried to make the time travel as easy and intuitive as possible for Git/Github. Here's a quick guide on how you can use it:
 
 1. clone this repo
 
@@ -23,10 +23,10 @@ Arguments (in order):
 1. GITHUB USERNAME
 2. GITHUB REPO NAME
 3. NO. OF DAYS
-4. PAST : this is optional argument, by default true. If given false, then commits will be done for future not past.
+4. PAST? : this is optional argument, by default true. If given false, then commits will be done for future not past.
 
-> NOTE: You shold be allowed to push to the repo mentioned during running of the script `run.sh`
+> NOTE: You shold be allowed to push to the github repo, whose name is given as argument when you run the script `run.sh`
 
 ## Prerequisite
 
-1. A clean **GitHub Repository** on your GitHub account
+1. A clean **GitHub Repository** on your GitHub account, which is passed as argument to the script
