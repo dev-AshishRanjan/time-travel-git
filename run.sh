@@ -9,7 +9,7 @@ USERNAME="$1"
 USERID=""
 REPO="$2"
 
-CURRENT_DAY=$3
+CURRENT_DAY=2*$3
 PAST=${4:- true}
 DAY_APPEND=""
 TEMPLATE_DIR="Template"
@@ -57,7 +57,7 @@ copy_template_files() {
                 cp "$item" "$target"
                 # Commit files for the current directory
                 local RANDOM_NUMBER=$((RANDOM + 1))
-                local date="$CURRENT_DAY$DAY_APPEND.days.$((RANDOM_NUMBER%3)).hours.$((RANDOM_NUMBER%60)).minutes.$((RANDOM_NUMBER%60)).seconds.ago"
+                local date="$((CURRENT_DAY/2))$DAY_APPEND.days.$((RANDOM_NUMBER%3)).hours.$((RANDOM_NUMBER%60)).minutes.$((RANDOM_NUMBER%60)).seconds.ago"
                 local message="chore: add $item_name"
                 echo "$date"
                 git add $target
@@ -69,7 +69,8 @@ copy_template_files() {
 }
 
 fetch_and_append_users_data() {
-    local url="https://api.github.com/users?per_page=$CURRENT_DAY"
+    local fetchdays=$((CURRENT_DAY*2))
+    local url="https://api.github.com/users?per_page=$fetchdays"
     local response=$(curl -s "$url")
 
     # Parse JSON response and extract required fields
@@ -85,9 +86,9 @@ fetch_and_append_users_data() {
 
     # git checkout -b  users-update
     # Loop through extracted data and append it to the data.yaml file
-    for ((i=0; i<${#logins[@]}; i++)); do
+    for ((i=0; i<${#logins[@]}&&CURRENT_DAY>=0; i++)); do
         local RANDOM_NUMBER=$((RANDOM + 1))
-        local date="$CURRENT_DAY$DAY_APPEND.days.$((RANDOM_NUMBER%3)).hours.$((RANDOM_NUMBER%60)).minutes.$((RANDOM_NUMBER%60)).seconds.ago"
+        local date="$((CURRENT_DAY/2))$DAY_APPEND.days.$((RANDOM_NUMBER%3)).hours.$((RANDOM_NUMBER%60)).minutes.$((RANDOM_NUMBER%60)).seconds.ago"
         local message="chore: add data for ${logins[i]}"
 
         # Append fetched data to the data.yaml file
@@ -99,7 +100,13 @@ fetch_and_append_users_data() {
         
         git add "$DATA_FILE"
         git commit --date=format:relative:"$date" --author="$USERNAME < $USERID+$USERNAME@users.noreply.github.com>" -m "$message"
-        ((CURRENT_DAY--))
+        
+        # ((CURRENT_DAY--))
+        ((CURRENT_DAY=CURRENT_DAY-(RANDOM % 3)))
+        # echo $CURRENT_DAY
+        # if $((RANDOM % 2 == 0)); then
+        #     ((i--))
+        # fi
     done
 
     # git checkout dev
